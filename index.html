@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete Git Commands Guide - Professional reference for developers and DevOps engineers">
+    <meta name="keywords" content="git, commands, devops, version control, github, gitlab, developer, programming">
+    <meta name="author" content="DevOps Professional">
+    <meta property="og:title" content="Git Commands - Professional Guide">
+    <meta property="og:description" content="Master Git with this comprehensive command reference guide">
+    <meta property="og:type" content="website">
+    <title>Git Commands - Professional Guide | DevOps Reference</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            /* Theme colors */
+            --primary-color: #3b82f6;
+            --secondary-color: #1e40af;
+            --accent-color: #60a5fa;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            
+            /* Dark theme (default) */
+            --bg-color: #0a0b0f;
+            --surface-color: rgba(30, 41, 59, 0.3);
+            --glass-bg: rgba(30, 41, 59, 0.1);
+            --glass-border: rgba(148, 163, 184, 0.2);
+            --text-color: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(148, 163, 184, 0.1);
+            --card-bg: rgba(30, 41, 59, 0.2);
+            --navbar-bg: rgba(10, 11, 15, 0.8);
+        }
+        
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --surface-color: rgba(255, 255, 255, 0.3);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(148, 163, 184, 0.3);
+            --text-color: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: rgba(148, 163, 184, 0.2);
+            --card-bg: rgba(255, 255, 255, 0.2);
+            --navbar-bg: rgba(248, 250, 252, 0.8);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            z-index: -2;
+            animation: backgroundMove 20s ease-in-out infinite;
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(2px 2px at 40px 60px, rgba(59, 130, 246, 0.3), transparent),
+                radial-gradient(2px 2px at 90px 30px, rgba(16, 185, 129, 0.3), transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(99, 102, 241, 0.3), transparent);
+            background-size: 200px 150px;
+            z-index: -1;
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        @keyframes backgroundMove {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(1deg); }
+            66% { transform: translateY(30px) rotate(-1deg); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateX(0px) translateY(0px); }
+            33% { transform: translateX(30px) translateY(-20px); }
+            66% { transform: translateX(-20px) translateY(20px); }
+        }
+        
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--navbar-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            background: var(--navbar-bg);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+        }
+        
+        .theme-toggle {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-color);
+            padding: 0.75rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            font-size: 1.2rem;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+        }
+        
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--text-color) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+        
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            color: var(--text-color);
+            border: 1px solid var(--glass-border);
+        }
+        
+        .btn-glass:hover {
+            background: var(--surface-color);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section {
+            margin-bottom: 6rem;
+            padding: 0 2rem;
+        }
+        
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Table of Contents */
+        .toc {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 3rem;
+            border-radius: 24px;
+            margin-bottom: 4rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .toc-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            text-align: center;
+        }
+        
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .toc-item {
+            padding: 1rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--surface-color);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .toc-item:hover {
+            color: var(--primary-color);
+            background: var(--glass-bg);
+            transform: translateY(-2px);
+        }
+        
+        .toc-item i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        
+        /* Command Categories */
+        .category {
+            margin-bottom: 6rem;
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .category-icon {
+            background: var(--primary-color);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+        
+        .category-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .category-description {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        /* Command Grid */
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .command-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .command-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+        
+        .command-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+        }
+        
+        .command-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .command-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        
+        .command-number {
+            background: var(--primary-color);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .command-syntax {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--success-color);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow-x: auto;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .command-syntax::before {
+            content: '$';
+            color: var(--accent-color);
+            margin-right: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--primary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .command-syntax:hover .copy-btn {
+            opacity: 1;
+        }
+        
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .command-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+        
+        .command-example {
+            background: var(--surface-color);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        
+        .command-example strong {
+            color: var(--text-color);
+        }
+        
+        /* Workflow Section - Centered with max-width */
+        .workflow {
+            background: transparent;
+            padding: 6rem 0;
+            margin: 6rem 0;
+        }
+        
+        .workflow-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin: 3rem auto;
+            max-width: 1400px;
+        }
+        
+        .workflow-step {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            transition: all 0.4s ease;
+            width: 100%;
+        }
+        
+        .step-left-elements {
+            position: absolute;
+            left: 3rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            z-index: 2;
+        }
+        
+        .step-center-content {
+            text-align: center;
+            width: 100%;
+            padding: 0 8rem;
+        }
+        
+        .workflow-step:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(59, 130, 246, 0.15);
+        }
+        
+        .workflow-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 20px solid var(--primary-color);
+            z-index: 1;
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .step-number {
+            background: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        
+        .step-icon {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .step-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .step-command {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--success-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin: 1rem auto;
+            display: inline-block;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .step-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            text-align: center;
+            width: 100%;
+            padding: 0 2rem;
+        }
+        
+        .workflow-explanation {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 4rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        
+        .explanation-title {
+            color: var(--text-color);
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .explanation-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            text-align: center;
+        }
+        
+        .explanation-content p {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        /* Best Practices - 2x2 Grid */
+        .best-practices {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 4rem;
+            border-radius: 24px;
+            margin: 6rem auto;
+            max-width: 1400px;
+        }
+        
+        .practices-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .practice-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            background: var(--surface-color);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            min-height: 180px;
+        }
+        
+        .practice-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.1);
+        }
+        
+        .practice-icon {
+            background: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.3rem;
+        }
+        
+        .practice-content h4 {
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        .practice-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Quick Reference */
+        .quick-reference {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 4rem;
+            border-radius: 24px;
+            margin: 6rem auto;
+            max-width: 1400px;
+        }
+        
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .reference-section h4 {
+            color: var(--success-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .reference-command {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--glass-border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .reference-command:last-child {
+            border-bottom: none;
+        }
+        
+        .command-name {
+            color: var(--success-color);
+            font-weight: 500;
+        }
+        
+        .command-desc-short {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            color: var(--text-color);
+            padding: 4rem 0 2rem;
+            margin-top: 6rem;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .footer-link:hover {
+            color: var(--accent-color);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-color);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .toc-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .toc-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--navbar-bg);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid var(--glass-border);
+                padding: 2rem;
+                gap: 1rem;
+            }
+            
+            .nav-menu.show {
+                display: flex;
+            }
+            
+            .theme-toggle {
+                margin-top: 1rem;
+                align-self: center;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .commands-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .workflow-steps {
+                gap: 1.5rem;
+                margin: 2rem 0;
+            }
+            
+            .workflow-step {
+                padding: 2rem;
+            }
+            
+            .step-left-elements {
+                position: static;
+                transform: none;
+                justify-content: center;
+                margin-bottom: 1rem;
+            }
+            
+            .step-center-content {
+                padding: 0;
+            }
+            
+            .step-title {
+                font-size: 1.4rem;
+            }
+            
+            .step-command {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+            }
+            
+            .step-description {
+                padding: 0;
+                margin-top: 1rem;
+            }
+            
+            .practices-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .practice-item {
+                padding: 1.5rem;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fab fa-git-alt"></i>
+                Git Guide
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#basics" class="nav-link">Basics</a></li>
+                <li><a href="#branching" class="nav-link">Branching</a></li>
+                <li><a href="#remote" class="nav-link">Remote</a></li>
+                <li><a href="#workflow" class="nav-link">Workflow</a></li>
+                <li><a href="#advanced" class="nav-link">Advanced</a></li>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-sun" id="theme-icon"></i>
+                </button>
+            </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-badge">
+                <i class="fas fa-code"></i>
+                Professional Git Reference
+            </div>
+            
+            <h1 class="hero-title">Master Git Commands</h1>
+            <p class="hero-subtitle">
+                The complete glassmorphism-styled guide for developers and DevOps engineers. 
+                Learn essential Git commands with modern UI and practical examples.
+            </p>
+            
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <span class="stat-number">25+</span>
+                    <span class="stat-label">Essential Commands</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Free & Open</span>
+                </div>
+            </div>
+            
+            <div class="cta-buttons">
+                <a href="#basics" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    Start Learning
+                </a>
+                <a href="#quick-ref" class="btn btn-glass">
+                    <i class="fas fa-download"></i>
+                    Quick Reference
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Table of Contents -->
+        <section class="section">
+            <div class="section-container">
+                <div class="toc">
+                    <h3 class="toc-title">
+                        <i class="fas fa-list"></i>
+                        Complete Learning Path
+                    </h3>
+                    <div class="toc-grid">
+                        <a href="#basics" class="toc-item">
+                            <i class="fas fa-play"></i>
+                            Basic Commands
+                        </a>
+                        <a href="#branching" class="toc-item">
+                            <i class="fas fa-code-branch"></i>
+                            Branch Management
+                        </a>
+                        <a href="#remote" class="toc-item">
+                            <i class="fas fa-cloud"></i>
+                            Remote Operations
+                        </a>
+                        <a href="#workflow" class="toc-item">
+                            <i class="fas fa-project-diagram"></i>
+                            Workflow Guide
+                        </a>
+                        <a href="#advanced" class="toc-item">
+                            <i class="fas fa-cogs"></i>
+                            Advanced Techniques
+                        </a>
+                        <a href="#quick-ref" class="toc-item">
+                            <i class="fas fa-bolt"></i>
+                            Quick Reference
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Basic Commands -->
+        <section id="basics" class="section">
+            <div class="section-container">
+                <div class="category">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div>
+                            <h2 class="category-title">Basic Commands</h2>
+                            <p class="category-description">
+                                Essential Git commands every developer must know. These form the foundation of your Git workflow.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="commands-grid">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">1</div>
+                            </div>
+                            <div class="command-syntax">
+                                git init
+                                <button class="copy-btn" onclick="copyToClipboard('git init')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Initializes a new Git repository. Takes your project under version control and creates a .git folder.
+                            </div>
+                            <div class="command-example">
+                                <strong>Usage:</strong> Run in your new project folder
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">2</div>
+                            </div>
+                            <div class="command-syntax">
+                                git clone &lt;repository-url&gt;
+                                <button class="copy-btn" onclick="copyToClipboard('git clone')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Copies a repository from remote server to your local machine. First step to start working on a project.
+                            </div>
+                            <div class="command-example">
+                                <strong>Example:</strong> git clone https://github.com/user/project.git
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">3</div>
+                            </div>
+                            <div class="command-syntax">
+                                git add &lt;file&gt; | git add .
+                                <button class="copy-btn" onclick="copyToClipboard('git add .')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Adds files to the staging area. Determines which changes will be included in the next commit.
+                            </div>
+                            <div class="command-example">
+                                <strong>All files:</strong> git add .<br>
+                                <strong>Single file:</strong> git add index.html
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">4</div>
+                            </div>
+                            <div class="command-syntax">
+                                git commit -m "commit message"
+                                <button class="copy-btn" onclick="copyToClipboard('git commit -m')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Permanently saves changes from staging area to repository. Each commit is a snapshot in time.
+                            </div>
+                            <div class="command-example">
+                                <strong>Good message:</strong> "Add user authentication feature"
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">5</div>
+                            </div>
+                            <div class="command-syntax">
+                                git status
+                                <button class="copy-btn" onclick="copyToClipboard('git status')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Shows the current state of working directory. Which files changed, which are staged.
+                            </div>
+                            <div class="command-example">
+                                <strong>Usage:</strong> Check status before every operation
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">6</div>
+                            </div>
+                            <div class="command-syntax">
+                                git log --oneline --graph
+                                <button class="copy-btn" onclick="copyToClipboard('git log --oneline --graph')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Displays commit history in a visual way. Track your project's evolution over time.
+                            </div>
+                            <div class="command-example">
+                                <strong>Detailed:</strong> git log --all --decorate --oneline --graph
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Branch Management -->
+        <section id="branching" class="section">
+            <div class="section-container">
+                <div class="category">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                        <div>
+                            <h2 class="category-title">Branch Management</h2>
+                            <p class="category-description">
+                                Master branching strategies for efficient feature development and collaboration.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="commands-grid">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">7</div>
+                            </div>
+                            <div class="command-syntax">
+                                git branch &lt;branch-name&gt;
+                                <button class="copy-btn" onclick="copyToClipboard('git branch')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Creates a new branch. Use separate branches for feature development.
+                            </div>
+                            <div class="command-example">
+                                <strong>Naming:</strong> feature/user-login, bugfix/payment-error
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">8</div>
+                            </div>
+                            <div class="command-syntax">
+                                git checkout &lt;branch&gt;
+                                <button class="copy-btn" onclick="copyToClipboard('git checkout')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Switches between different branches. In modern Git, you can also use git switch.
+                            </div>
+                            <div class="command-example">
+                                <strong>Create + switch:</strong> git checkout -b feature/new-feature
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">9</div>
+                            </div>
+                            <div class="command-syntax">
+                                git merge &lt;branch-name&gt;
+                                <button class="copy-btn" onclick="copyToClipboard('git merge')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Merges one branch into current branch. Merge to main after feature completion.
+                            </div>
+                            <div class="command-example">
+                                <strong>Workflow:</strong> git checkout main && git merge feature/login
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">10</div>
+                            </div>
+                            <div class="command-syntax">
+                                git branch -d &lt;branch&gt;
+                                <button class="copy-btn" onclick="copyToClipboard('git branch -d')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Deletes merged branches. Remove unnecessary branches for clean repository.
+                            </div>
+                            <div class="command-example">
+                                <strong>Force delete:</strong> git branch -D branch-name
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Remote Operations -->
+        <section id="remote" class="section">
+            <div class="section-container">
+                <div class="category">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <div>
+                            <h2 class="category-title">Remote Operations</h2>
+                            <p class="category-description">
+                                Collaborate effectively with team members using remote repositories.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="commands-grid">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">11</div>
+                            </div>
+                            <div class="command-syntax">
+                                git push origin &lt;branch&gt;
+                                <button class="copy-btn" onclick="copyToClipboard('git push origin')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Sends local commits to remote server. Share your work with the team.
+                            </div>
+                            <div class="command-example">
+                                <strong>First push:</strong> git push -u origin main
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">12</div>
+                            </div>
+                            <div class="command-syntax">
+                                git pull origin &lt;branch&gt;
+                                <button class="copy-btn" onclick="copyToClipboard('git pull origin')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Fetches changes from remote server to local repository. Stay up to date.
+                            </div>
+                            <div class="command-example">
+                                <strong>With rebase:</strong> git pull --rebase origin main
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">13</div>
+                            </div>
+                            <div class="command-syntax">
+                                git fetch
+                                <button class="copy-btn" onclick="copyToClipboard('git fetch')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Downloads changes from remote but doesn't merge. Safe way to update.
+                            </div>
+                            <div class="command-example">
+                                <strong>Then merge:</strong> git fetch && git merge origin/main
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">14</div>
+                            </div>
+                            <div class="command-syntax">
+                                git remote -v
+                                <button class="copy-btn" onclick="copyToClipboard('git remote -v')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Lists connected remote repositories. Which servers are you connected to?
+                            </div>
+                            <div class="command-example">
+                                <strong>Add remote:</strong> git remote add upstream https://github.com/original/repo.git
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Workflow Section - Centered with max-width -->
+        <section id="workflow" class="workflow">
+            <div class="workflow-container">
+                <div class="section-header" style="text-align: center;">
+                    <h2 class="section-title">Git Workflow & Behind the Scenes</h2>
+                    <p class="section-subtitle">
+                        Understand the complete Git workflow and what happens behind the scenes
+                    </p>
+                </div>
+                
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-left-elements">
+                            <div class="step-number">1</div>
+                            <div class="step-icon">
+                                <i class="fas fa-download"></i>
+                            </div>
+                        </div>
+                        <div class="step-center-content">
+                            <div class="step-title">Clone Repository</div>
+                            <div class="step-command">git clone &lt;repository-url&gt;</div>
+                        </div>
+                        <div class="step-description">
+                            Downloads the entire project history from remote server to your local machine. Creates a complete copy of the repository including all branches, commits, and files. This establishes the connection between your local and remote repositories.
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-left-elements">
+                            <div class="step-number">2</div>
+                            <div class="step-icon">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                        </div>
+                        <div class="step-center-content">
+                            <div class="step-title">Create Branch</div>
+                            <div class="step-command">git checkout -b feature/new-feature</div>
+                        </div>
+                        <div class="step-description">
+                            Creates a new branch pointer that references the current commit. Branches in Git are lightweight movable pointers to specific commits. This allows you to work on features in isolation without affecting the main codebase.
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-left-elements">
+                            <div class="step-number">3</div>
+                            <div class="step-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                        </div>
+                        <div class="step-center-content">
+                            <div class="step-title">Make Changes</div>
+                            <div class="step-command">vim index.html</div>
+                        </div>
+                        <div class="step-description">
+                            Modify files in your working directory. Git tracks these changes but doesn't save them yet. The working directory is where you actually edit files - Git monitors what's different from the last commit.
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-left-elements">
+                            <div class="step-number">4</div>
+                            <div class="step-icon">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </div>
+                        <div class="step-center-content">
+                            <div class="step-title">Stage Changes</div>
+                            <div class="step-command">git add .</div>
+                        </div>
+                        <div class="step-description">
+                            Moves changes from working directory to staging area (index). The staging area is a file in .git/index that stores information about what will go into your next commit. This step lets you selectively choose which changes to include.
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-left-elements">
+                            <div class="step-number">5</div>
+                            <div class="step-icon">
+                                <i class="fas fa-save"></i>
+                            </div>
+                        </div>
+                        <div class="step-center-content">
+                            <div class="step-title">Commit Changes</div>
+                            <div class="step-command">git commit -m "Add new feature"</div>
+                        </div>
+                        <div class="step-description">
+                            Creates a snapshot of staged changes in Git's object database. Each commit contains tree objects (directories), blob objects (files), author information, timestamp, and a reference to parent commit(s). This creates a permanent record in project history.
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-left-elements">
+                            <div class="step-number">6</div>
+                            <div class="step-icon">
+                                <i class="fas fa-upload"></i>
+                            </div>
+                        </div>
+                        <div class="step-center-content">
+                            <div class="step-title">Push to Remote</div>
+                            <div class="step-command">git push origin feature/new-feature</div>
+                        </div>
+                        <div class="step-description">
+                            Uploads your local commits to the remote repository. This transfers all the objects (commits, trees, blobs) that don't exist on the remote server. Makes your changes available to other team members and creates a backup of your work.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="workflow-explanation">
+                    <h4 class="explanation-title">
+                        <i class="fas fa-lightbulb" style="color: var(--warning-color);"></i>
+                        Git's Three-Tree Architecture
+                    </h4>
+                    <div class="explanation-content">
+                        <p><strong>Working Directory:</strong> Your actual files where you make changes. Git tracks modifications here.</p>
+                        <p><strong>Staging Area (Index):</strong> A binary file in .git/index that stores information about what will go into your next commit.</p>
+                        <p><strong>Repository (.git directory):</strong> Contains object database with compressed snapshots of your project.</p>
+                        <p><strong>Object Database:</strong> Stores commits (snapshots), trees (directories), blobs (files), and tags using SHA-1 hashes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Advanced Commands -->
+        <section id="advanced" class="section">
+            <div class="section-container">
+                <div class="category">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div>
+                            <h2 class="category-title">Advanced Commands</h2>
+                            <p class="category-description">
+                                Master advanced Git techniques for complex workflows and repository management.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="commands-grid">
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">15</div>
+                            </div>
+                            <div class="command-syntax">
+                                git rebase -i HEAD~3
+                                <button class="copy-btn" onclick="copyToClipboard('git rebase -i HEAD~3')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Interactive rebase to edit, squash, or reorder commits. Clean up commit history.
+                            </div>
+                            <div class="command-example">
+                                <strong>Operations:</strong> pick, squash, edit, drop commits
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">16</div>
+                            </div>
+                            <div class="command-syntax">
+                                git stash
+                                <button class="copy-btn" onclick="copyToClipboard('git stash')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Temporarily saves uncommitted changes. Switch branches without losing work.
+                            </div>
+                            <div class="command-example">
+                                <strong>Restore:</strong> git stash pop
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">17</div>
+                            </div>
+                            <div class="command-syntax">
+                                git cherry-pick &lt;commit&gt;
+                                <button class="copy-btn" onclick="copyToClipboard('git cherry-pick')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Applies specific commits to current branch. Move commits between branches.
+                            </div>
+                            <div class="command-example">
+                                <strong>Range:</strong> git cherry-pick commit1..commit3
+                            </div>
+                        </div>
+                        
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-number">18</div>
+                            </div>
+                            <div class="command-syntax">
+                                git reset --hard HEAD~1
+                                <button class="copy-btn" onclick="copyToClipboard('git reset --hard HEAD~1')">Copy</button>
+                            </div>
+                            <div class="command-description">
+                                Completely removes last commit. WARNING: Destructive operation!
+                            </div>
+                            <div class="command-example">
+                                <strong>Safer:</strong> git reset --soft HEAD~1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Best Practices - 2x2 Grid -->
+        <section class="section">
+            <div class="section-container">
+                <div class="best-practices">
+                    <div class="section-header">
+                        <h2 class="section-title">Best Practices</h2>
+                        <p class="section-subtitle">
+                            Professional Git practices for clean, maintainable repositories
+                        </p>
+                    </div>
+                    
+                    <div class="practices-grid">
+                        <div class="practice-item">
+                            <div class="practice-icon">
+                                <i class="fas fa-message"></i>
+                            </div>
+                            <div class="practice-content">
+                                <h4>Clear Commit Messages</h4>
+                                <p>Write descriptive, actionable commit messages that explain what and why. Use present tense and be specific about changes.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="practice-item">
+                            <div class="practice-icon">
+                                <i class="fas fa-atom"></i>
+                            </div>
+                            <div class="practice-content">
+                                <h4>Atomic Commits</h4>
+                                <p>Make small, focused commits that do one thing well. Each commit should represent a logical unit of change.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="practice-item">
+                            <div class="practice-icon">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <div class="practice-content">
+                                <h4>Feature Branches</h4>
+                                <p>Use separate branches for features, bugs, and experiments. Keep main branch stable and deployable.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="practice-item">
+                            <div class="practice-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="practice-content">
+                                <h4>Protect Sensitive Data</h4>
+                                <p>Never commit passwords, keys, or sensitive information. Use .gitignore and environment variables.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Quick Reference -->
+        <section id="quick-ref" class="section">
+            <div class="section-container">
+                <div class="quick-reference">
+                    <div class="section-header">
+                        <h2 class="section-title">Quick Reference</h2>
+                        <p class="section-subtitle">
+                            Essential commands at a glance
+                        </p>
+                    </div>
+                    
+                    <div class="reference-grid">
+                        <div class="reference-section">
+                            <h4>Setup & Config</h4>
+                            <div class="reference-command">
+                                <span class="command-name">git config --global user.name</span>
+                                <span class="command-desc-short">Set username</span>
+                            </div>
+                            <div class="reference-command">
+                                <span class="command-name">git config --global user.email</span>
+                                <span class="command-desc-short">Set email</span>
+                            </div>
+                            <div class="reference-command">
+                                <span class="command-name">git init</span>
+                                <span class="command-desc-short">Initialize repo</span>
+                            </div>
+                            <div class="reference-command">
+                                <span class="command-name">git clone &lt;url&gt;</span>
+                                <span class="command-desc-short">Clone repository</span>
+                            </div>
+                        </div>
+                        
+                        <div class="reference-section">
+                            <h4>Daily Commands</h4>
+                            <div class="reference-command">
+                                <span class="command-name">git status</span>
+                                <span class="command-desc-short">Check status</span>
+                            </div>
+                            <div class="reference-command">
+                                <span class="command-name">git add .</span>
+                                <span class="command-desc-short">Stage all files</span>
+                            </div>
+                            <div class="reference-command">
+                                <span class="command-name">git commit -m "msg"</span>
+                                <span class="command-desc-short">Commit changes</span>
+                            </div>
+                            <div class="reference-command">
+                                <span class="command-name">git push</span>
+                                <span class="command-desc-short">Push to remote</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/n0tnow/git-commands-guide" class="footer-link">GitHub Repository</a>
+                <a href="https://docs.github.com/en/get-started/using-git" class="footer-link">Git Documentation</a>
+                <a href="https://github.com/n0tnow/git-commands-guide/issues" class="footer-link">Contribute</a>
+            </div>
+            
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/Bila1Kaya/" target="_blank" class="social-link" title="LinkedIn Profile">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/n0tnow" target="_blank" class="social-link" title="GitHub Profile">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+            
+            <p>&copy; 2025 Git Commands Guide. Made with ❤️ by <a href="https://www.linkedin.com/in/Bila1Kaya/" style="color: var(--primary-color); text-decoration: none;">Bila Kaya</a> for the developer community.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            // Default to dark theme
+            if (savedTheme === 'light') {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-moon';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+            }
+        });
+        
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('show');
+        }
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            const progressBar = document.getElementById('progressBar');
+            
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            // Progress bar
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + "%";
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Copy to clipboard functionality
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Show success message with tick
+                const btn = event.target;
+                const originalText = btn.textContent;
+                const originalBg = btn.style.background;
+                
+                btn.innerHTML = '✓ Copied!';
+                btn.style.background = 'var(--success-color)';
+                btn.style.color = 'white';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = originalBg || 'rgba(59, 130, 246, 0.2)';
+                    btn.style.color = '';
+                }, 2000);
+            }).catch(function() {
+                // Fallback for older browsers
+                const btn = event.target;
+                btn.textContent = 'Copy manually';
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+        
+        // Active navigation highlighting
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.command-card, .practice-item, .stat-card').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Close mobile menu when clicking on links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                const navMenu = document.getElementById('navMenu');
+                navMenu.classList.remove('show');
+            });
+        });
+    </script>
+</body>
+</html>
